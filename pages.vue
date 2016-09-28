@@ -4,8 +4,8 @@
             <i class="icon left arrow"></i>
         </a>
 
-        <a class="item" :class="{active : num === now}"
-           v-for="num in nums"
+        <a class="item" :class="{active: num === now}"
+           v-for="num of nums"
            @click="go(num)">{{num}}</a>
 
         <a class="item icon" title="末页" v-if="now < total_page" @click="go(total_page)">
@@ -25,7 +25,7 @@
             },
             size: {
                 type: [Number],
-                default: 10
+                default: 20
             },
             total: {
                 type: [Number],
@@ -47,6 +47,9 @@
                 let nums = [this.now];
                 let after = this.now <= this.ext ? this.ext - this.now + 1 : 0;
                 let before = this.total_page - this.now < this.ext ? this.ext - (this.total_page - this.now) : 0;
+                if (!this.total_page) {
+                    before = 0;
+                }
                 for (let i = this.now - 1; this.now - i <= this.ext + before && i > 0; i--) {
                     nums.unshift(i);
                 }
@@ -59,9 +62,12 @@
         methods: {
             go(num) {
                 if (num !== this.now) {
-                    this.page = num;
+                    this.$emit('get', num);
                 }
             }
+        },
+        ready() {
+            this.$emit('get', this.now);
         }
     }
 </script>
