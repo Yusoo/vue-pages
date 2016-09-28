@@ -8,7 +8,7 @@ Vue分页组件
 # 使用
 
 ```html
-<pages :page.sync="param.page" :total="total"></pages>
+<pages :page="param.page" :size="param.size" :total="total" @get="getList"></pages>
 ```
 
 
@@ -21,19 +21,16 @@ Vue分页组件
             return {
                 param: {
                     search: '',
-                    rows: 10,
+                    size: 10,
                     page: 1
                 },
                 total: 0,
                 rows: []
             }
         },
-        watch: {
-            'param.page': {
-                immediate: true,
-                handler(val, oldVal) {
-                    getList();
-                }
+        methods: {
+            getList(num) {
+                this.param.page = num;
             }
         },
         components: {
